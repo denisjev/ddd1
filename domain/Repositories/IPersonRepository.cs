@@ -4,5 +4,6 @@ using DDD1.Domain.Entities;
 public interface IPersonRepository
 {
     Task<Person> GetPersonById(int id);
-    Task AddPerson(Person person);
+    Task<int> AddPerson(Person person);
+    Task<IEnumerable<Person>> GetAllPerson();
 }

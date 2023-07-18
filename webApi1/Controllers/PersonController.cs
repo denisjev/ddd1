@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DDD1.Domain.Entities;
+using DDD1.Infraestructure.InputPort;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Namespace
@@ -10,21 +12,34 @@ namespace Namespace
     [Route("api/[controller]")]
     public class PersonController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private readonly IPersonUseCaseServices personUseCaseServices;
+        public PersonController(IPersonUseCaseServices _personUseCaseServices)
         {
-            return new string[] { "value1", "value2" };
+            personUseCaseServices = _personUseCaseServices;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Person>> Get()
+        {
+            return await personUseCaseServices.getAllPerson();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<Person> Get(int id)
         {
-            return "value";
+            var result = await personUseCaseServices.getPersonById(id);
+            return result;
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Person value)
         {
+            var response = await personUseCaseServices.createPerson(value.Nombre, value.Edad, value.Sexo);
+
+            if(response > 0)
+                return Ok();
+            else
+                return NotFound();
         }
 
         [HttpPut("{id}")]

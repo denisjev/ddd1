@@ -1,7 +1,10 @@
+using DDD1.Infraestructure.InputPort;
+using DDD1.Application.InputAdapter;
 using DDD1.Infraestructure.OutputAdapter.EFRepositories;
 
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql;
+//using Pomelo.EntityFrameworkCore.MySql;
+using DDD1.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseMySql(builder.Configuration.GetConnectionString("AppDbContext"),
     new MySqlServerVersion(new Version(8,0))).EnableDetailedErrors());
+
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IPersonUseCaseServices, PersonUseCaseServices>();
 
 var app = builder.Build();
 

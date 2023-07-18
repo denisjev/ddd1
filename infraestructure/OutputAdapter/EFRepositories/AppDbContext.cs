@@ -1,6 +1,5 @@
 ﻿namespace DDD1.Infraestructure.OutputAdapter.EFRepositories;
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
